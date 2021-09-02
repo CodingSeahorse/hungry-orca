@@ -41,7 +41,7 @@ class OrcaFileRepositoryTest {
     }
 
     @Test
-    void should_save_a_MultipartFile_to_Database(){
+    void should_save_a_MultipartFile_to_Database() {
         orcaFileRepository.save(orcaFile);
 
         OrcaFile findOrcaFile = orcaFileRepository.findByOrcaFileName(orcaFile.getOrcaFileName());
