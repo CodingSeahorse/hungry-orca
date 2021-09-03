@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +22,8 @@ public class OrcaFileService {
 
     public void saveFile(MultipartFile multipartFile){
         String fileName =
-                StringUtils.cleanPath(multipartFile.getOriginalFilename());
+                StringUtils.cleanPath(
+                        Objects.requireNonNull(multipartFile.getOriginalFilename()));
         Pattern myPattern = Pattern.compile("[^A-Za-z0-9._]");
         Matcher m = myPattern.matcher(fileName);
         boolean existsSpecialSign = m.find();
