@@ -39,7 +39,7 @@ class OrcaFileControllerTest {
     }
 
     @Test
-    void check_if_endpoint_download_works_correctly() throws Exception {
+    void check_if_endpoint_upload_works_correctly() throws Exception {
         orcaFileService.saveFile(mockMultipartFile);
 
         mockMvc.perform(multipart("/api/orca/upload")
