@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -66,5 +67,16 @@ class OrcaFileRepositoryTest {
 
         assertThat(findOrcaFile.getOrcaFileId())
                 .isEqualTo(orcaFile.getOrcaFileId());
+    }
+
+    @Test
+    void should_retrieve_allFiles() {
+        orcaFileRepository.save(orcaFile);
+
+        List<OrcaFile> orcaFileList = orcaFileRepository.findAll();
+
+        assertThat(orcaFileList)
+                .isNotEmpty()
+                .isNotNull();
     }
 }

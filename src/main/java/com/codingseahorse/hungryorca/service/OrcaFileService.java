@@ -1,6 +1,7 @@
 package com.codingseahorse.hungryorca.service;
 
 import com.codingseahorse.hungryorca.exception.MyFileSaveException;
+import com.codingseahorse.hungryorca.exception.NotFoundException;
 import com.codingseahorse.hungryorca.model.OrcaFile;
 import com.codingseahorse.hungryorca.repository.OrcaFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,8 +54,7 @@ public class OrcaFileService {
                         multipartFile.getName(),
                         multipartFile.getContentType(),
                         multipartFile.getBytes(),
-                        new Date()
-                );
+                        new Date());
                 orcaFileRepository.save(orcaFile);
             }catch (Exception e){
                 throw new MyFileSaveException(
@@ -61,5 +62,12 @@ public class OrcaFileService {
                         + Arrays.toString(e.getStackTrace()));
             }
         }
+    }
+
+    public List<OrcaFile> retrieveAllOrcaFiles(){
+        if(orcaFileRepository.findAll().isEmpty()){
+            throw new NotFoundException("No OrcaFiles found in database. Please upload a file");
+        }
+        return orcaFileRepository.findAll();
     }
 }

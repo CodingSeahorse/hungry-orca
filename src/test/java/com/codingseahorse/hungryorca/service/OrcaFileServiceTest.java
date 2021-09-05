@@ -1,6 +1,7 @@
 package com.codingseahorse.hungryorca.service;
 
 import com.codingseahorse.hungryorca.exception.MyFileSaveException;
+import com.codingseahorse.hungryorca.exception.NotFoundException;
 import com.codingseahorse.hungryorca.model.OrcaFile;
 import com.codingseahorse.hungryorca.repository.OrcaFileRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -96,5 +99,34 @@ class OrcaFileServiceTest {
                 () -> orcaFileService.saveFile(wrongMultipartFile2))
                 .isInstanceOf(MyFileSaveException.class)
                 .hasMessageContaining("A error has occurred. Failed saving file.");
+    }
+
+    @Test
+    void should_retrieveAllOrcaFiles_from_in_database() {
+        List<OrcaFile> orcaFileList = new ArrayList<>();
+        orcaFileList.add(orcaFile);
+
+        given(orcaFileRepository.findAll())
+                .willReturn(orcaFileList);
+
+        List<OrcaFile> resultList =
+                orcaFileService.retrieveAllOrcaFiles();
+
+        assertThat(resultList)
+                .isEqualTo(orcaFileList);
+    }
+
+    @Test
+    void should_throw_exception_if_no_OrcaFiles_found() {
+        List<OrcaFile> emptyOrcaFileList = new ArrayList<>();
+
+        given(orcaFileRepository.findAll())
+                .willReturn(emptyOrcaFileList);
+
+        assertThatThrownBy(
+                () -> orcaFileService.retrieveAllOrcaFiles())
+                .isNotNull()
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("No OrcaFiles found in database. Please upload a file");
     }
 }
