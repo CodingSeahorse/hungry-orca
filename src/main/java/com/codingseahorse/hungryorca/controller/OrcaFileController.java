@@ -41,10 +41,10 @@ public class OrcaFileController {
                             responseCode = "500",
                             description = "uploaded file was to large",
                             content = @Content)})
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/upload")
     public void uploadOrcaFile(
-            @RequestBody MultipartFile multipartFile,
+            @RequestParam MultipartFile multipartFile,
             RedirectAttributes ra){
         orcaFileService.saveFile(multipartFile);
 

@@ -8,7 +8,7 @@ ___
 + GET REQUEST (***Retrieve*** all files)
 > http://localhost:8080/api/orca
 + GET REQUEST (***Download*** a file)
-> http://localhost:8080/api/orca/download?fileId
+> http://localhost:8080/api/orca/download?fileName
 + POST REQUEST (***Upload*** a file)
 > http://localhost:8080/api/orca/upload
 > ~payload: Multipartfile
