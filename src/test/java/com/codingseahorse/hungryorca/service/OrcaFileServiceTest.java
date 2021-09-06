@@ -91,7 +91,7 @@ class OrcaFileServiceTest {
     void should_throw_exception_if_a_error_has_occurred() {
         MultipartFile wrongMultipartFile2 = new MockMultipartFile(
                 "null",
-                "nametx.97t",
+                null,
                 null,
                 "".getBytes(StandardCharsets.UTF_8));
 
@@ -128,5 +128,11 @@ class OrcaFileServiceTest {
                 .isNotNull()
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("No OrcaFiles found in database. Please upload a file");
+    }
+
+    //TODO:WRITE DOWNLOAD TEST
+    @Test
+    void should_download_OrcaFile() {
+
     }
 }

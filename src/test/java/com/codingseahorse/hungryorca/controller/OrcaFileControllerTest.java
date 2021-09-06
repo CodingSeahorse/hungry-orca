@@ -14,8 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.nio.charset.StandardCharsets;
 
 import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -44,9 +43,9 @@ class OrcaFileControllerTest {
         orcaFileService.saveFile(mockMultipartFile);
 
         mockMvc.perform(multipart("/api/orca/upload")
-                        .file(mockMultipartFile)
+                        .file("file",mockMultipartFile.getBytes())
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         then(orcaFileService)
                 .should()
