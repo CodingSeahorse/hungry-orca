@@ -44,9 +44,9 @@ public class OrcaFileController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/upload")
     public void uploadOrcaFile(
-            @RequestParam MultipartFile multipartFile,
+            @RequestParam("file") MultipartFile file,
             RedirectAttributes ra){
-        orcaFileService.saveFile(multipartFile);
+        orcaFileService.saveFile(file);
 
         ra.addFlashAttribute(
                 "message",

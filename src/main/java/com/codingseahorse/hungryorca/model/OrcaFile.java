@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "orca_file")
+@Table(name = "orcafiles")
 @Getter
 @Setter
 @NoArgsConstructor

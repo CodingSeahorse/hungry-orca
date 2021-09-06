@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -44,14 +45,14 @@ public class OrcaFileService {
                     fileName));
         }else {
             try {
-                if(!multipartFile.getName().contains(".")){
+                if(!fileName.contains(".")){
                     throw new MyFileSaveException(
                             "This is not a valid file format. " +
                             "The file should contain a '.' " +
                             "followed from a valid file-format like(.txt,.jpg,.png,...)");
                 }
                 OrcaFile orcaFile = new OrcaFile(
-                        multipartFile.getName(),
+                        fileName,
                         multipartFile.getContentType(),
                         multipartFile.getBytes(),
                         new Date());
@@ -69,5 +70,10 @@ public class OrcaFileService {
             throw new NotFoundException("No OrcaFiles found in database. Please upload a file");
         }
         return orcaFileRepository.findAll();
+    }
+
+    // TODO: WRITE DOWNLOAD METHODE
+    public void download(String fileName, HttpServletResponse response) {
+
     }
 }

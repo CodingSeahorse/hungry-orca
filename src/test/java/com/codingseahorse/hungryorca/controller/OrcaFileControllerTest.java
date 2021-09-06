@@ -46,7 +46,7 @@ class OrcaFileControllerTest {
         mockMvc.perform(multipart("/api/orca/upload")
                         .file(mockMultipartFile)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         then(orcaFileService)
                 .should()
