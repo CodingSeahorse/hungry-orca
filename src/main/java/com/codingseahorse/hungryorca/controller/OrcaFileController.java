@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -74,4 +76,27 @@ public class OrcaFileController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<OrcaFile> getAllOrcaFiles(){return orcaFileService.retrieveAllOrcaFiles();}
+
+    @Operation(summary = "download a file")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "downloaded successfully",
+                            content = @Content),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Invalid variables. Please correct your parameters or url",
+                            content =  @Content),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "No page with this url found",
+                            content = @Content)})
+    @GetMapping("/download")
+    @ResponseStatus(HttpStatus.OK)
+    public void downloadOrcaFile(
+            @RequestParam("fileName") String fileName,
+            HttpServletResponse response) throws IOException {
+        orcaFileService.download(fileName,response);
+    }
 }

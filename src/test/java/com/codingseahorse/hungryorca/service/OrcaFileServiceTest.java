@@ -10,9 +10,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -33,6 +35,8 @@ class OrcaFileServiceTest {
 
     MultipartFile multipartFile;
     OrcaFile orcaFile;
+
+    HttpServletResponse httpServletResponse = new MockHttpServletResponse();
 
     @BeforeEach
     void setup() throws IOException {
@@ -130,9 +134,23 @@ class OrcaFileServiceTest {
                 .hasMessage("No OrcaFiles found in database. Please upload a file");
     }
 
-    //TODO:WRITE DOWNLOAD TEST
+    // TODO:EXTEND DOWNLOAD TEST
     @Test
-    void should_download_OrcaFile() {
+    void should_download_OrcaFile() throws IOException {
+        given(orcaFileRepository.findByOrcaFileName(anyString()))
+                .willReturn(orcaFile);
 
+        orcaFileService.download(orcaFile.getOrcaFileName(),httpServletResponse);
+    }
+
+    @Test
+    void should_throw_exception_if_orcaFile_not_found() {
+        given(orcaFileRepository.findByOrcaFileName(anyString()))
+                .willReturn(null);
+
+        assertThatThrownBy(
+                ()->orcaFileService.download(orcaFile.getOrcaFileName(),httpServletResponse))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(String.format("file %s not found.",orcaFile.getOrcaFileName()));
     }
 }
