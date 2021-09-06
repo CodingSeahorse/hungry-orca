@@ -5,11 +5,14 @@ import com.codingseahorse.hungryorca.exception.NotFoundException;
 import com.codingseahorse.hungryorca.model.OrcaFile;
 import com.codingseahorse.hungryorca.repository.OrcaFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -72,8 +75,26 @@ public class OrcaFileService {
         return orcaFileRepository.findAll();
     }
 
-    // TODO: WRITE DOWNLOAD METHODE
-    public void download(String fileName, HttpServletResponse response) {
 
+    public void download(String fileName, HttpServletResponse response) throws IOException {
+        OrcaFile searchedOrcaFile = orcaFileRepository.findByOrcaFileName(fileName);
+
+        if (searchedOrcaFile == null){
+            throw new NotFoundException(String.format(
+                    "file %s not found.",
+                    fileName));
+        }
+
+        String headerValue =
+                "attachment; filename=\"" +
+                searchedOrcaFile.getOrcaFileName() + "\"";
+
+        response.setContentType("application/octet-stream");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,headerValue);
+
+        ServletOutputStream outputStream = response.getOutputStream();
+
+        outputStream.write(searchedOrcaFile.getOrcaFileData());
+        outputStream.close();
     }
 }
